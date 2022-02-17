@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TALLER4 - OSCAR CARDENAS</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script type="text/javascript" src="Countries.js"></script>
+    <script type="text/javascript" src="cities.js"></script>
+    <style>
+        #map {
+            width: 100%;
+            height: 600px;
+            box-shadow: 5px 5px 5px #000;
+        }
+
+        .info {
+            padding: 6px 8px;
+            font: 14px/16px Arial, Helvetica, sans-serif;
+            background: white;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        .info h2 {
+            margin: 0 0 5px;
+            color: #777;
+        }
+    </style>
+
+</head>
+<style>
+    #map {
+        width: 100%;
+        height: 580px;
+        box-shadow: 5px 5px 5px #000;
+    }
+</style>
+
+<body>
+    <div id="map"></div>
+    <script>
+        var map = L.map('map', {
+            center: [1.615692, -75.615549],
+            zoom: 4,
+            layers: osm,
+            scrollWheelZoom: true,
+        });
+
+        L.control.scale().addTo(map);
+
+        var osm = new L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 18
+        }).addTo(map);
+        function GetColors(colors) {
+            return colors === 'Africa' ? '#27AE60' :
+                colors === 'Asia' ? '#C0392B' :
+                    colors === 'South America' ? '#F1C40F' :
+                        colors === 'Oceania' ? '#6C3483' :
+                            colors === 'Europe' ? '#E67E22' :
+                                colors === 'North America' ? '#2471A3' :
+                                    '#F1C40F';
+        }
+        function style(feature) {
+            return {
+                fillColor: GetColors(feature.properties.continent),
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.7
+            };
+        }
+        L.geoJson(countries,
+            {
+                style: style,
+                onEachFeature: popup
+            }).addTo(map);
+
+        L.geoJson(cities,
+            {
+                pointToLayer: pointToLayer,
+                onEachFeature: popupCity
+            }).addTo(map)
+       
+    </script>
+</body>
+
+
+
+</html>
